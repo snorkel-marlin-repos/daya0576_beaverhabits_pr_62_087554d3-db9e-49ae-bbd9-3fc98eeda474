@@ -13,10 +13,10 @@ A self-hosted habit tracking app without "Goals"
 
 # Derivatives
 
+
 - [HabitDeck](https://github.com/nov1n/HabitDeck): Turn your Stream Deck into an interactive habit tracker
-- [Apple Shortcut](https://github.com/daya0576/beaverhabits/discussions/50#discussion-7746029): A shortcut for sharing the App on iPhone
-- [Home Assistant Switch](https://github.com/daya0576/beaverhabits/issues/55#issuecomment-2569685687): A switch for home assistant to mark a habit as done
-- ...
+- [Unraid](https://unraid.net/community/apps/c/tools?q=beaver+habit#r): An out-of-the-box community App for your Unraid server
+- [Apple shortcut](https://www.icloud.com/shortcuts/bc2e81c8fb87417f814c3e216b4ae0cf): A shortcut for sharing the App on iPhone by [@DustinThal](https://github.com/DustinThal)
 
 # Getting Started
 
@@ -27,42 +27,26 @@ A self-hosted habit tracking app without "Goals"
 
 ## Self-Hosting
 
-### Unraid
-
-Simply search for "Beaver Habit Tracker" in the Community Apps store!
-
 ### Ship with Docker
+
+Example:
 
 ```bash
 docker run -d --name beaverhabits \
   -u $(id -u):$(id -g) \
+  -e FIRST_DAY_OF_WEEK=0 \
   -e HABITS_STORAGE=USER_DISK \
+  -e MAX_USER_COUNT=1 \
   -v /path/to/host/directory:/app/.user/ \
   -p 8080:8080 \
+  --restart unless-stopped \
   daya0576/beaverhabits:latest
-```
-
-Or Docker Compose:
-```yaml
-services:
-    beaverhabits:
-        container_name: beaverhabits
-        user: 1000:1000 # User permissions of your docker or default user.
-        environment:
-            # See the note below to find all the environment variables
-            - HABITS_STORAGE=USER_DISK # DATABASE stores in a single SQLite database named habits.db. USER_DISK option saves in a local json file.
-        volumes:
-            - /path/to/beaver/habits:/app/.user/ # Change directory to match your docker file scheme.
-        ports:
-            - 8080:8080
-        restart: unless-stopped
-        image: daya0576/beaverhabits:latest
 ```
 
 P.S. The container starts as nobody to increase the security and make it OpenShift compatible.
 To avoid [permission issues](https://github.com/daya0576/beaverhabits/discussions/31), ensure that the UID owning the host folder aligns with the UID of the user inside the container.
 
-## Options
+### Options:
 
 | Name | Description |
 |:--|:--|
@@ -83,6 +67,7 @@ uv venv && uv sync
 # Start the server
 ./start.sh dev
 ```
+
 
 # Features
 
@@ -128,7 +113,7 @@ Open page `/gui/order` to change the order of habits.
 # Future Plans
 
 1. Quantitative metrics
-2. Native mobile app -- can't wait to try Swift or Tauri :p
+2. Native mobile app (can't wait to learn Swift or Tauri 😁)
 3. Habit calendar template, e.g. vacations
 4. Category or Folders
 5. ...
